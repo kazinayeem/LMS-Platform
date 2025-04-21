@@ -1,3 +1,4 @@
-export default function page() {
-  return <div>page</div>;
+// app/dashboard/page.tsx
+export default function DashboardPage() {
+  return <div>Hello from Dashboard!</div>;
 }
