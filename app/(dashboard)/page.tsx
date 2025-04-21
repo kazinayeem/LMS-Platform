@@ -1,4 +1,4 @@
 // app/dashboard/page.tsx
 export default function DashboardPage() {
-  return <div>Hello from Dashboard!</div>;
+  return <div className="">Hello from Dashboard!</div>;
 }
