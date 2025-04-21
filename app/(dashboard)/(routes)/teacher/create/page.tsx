@@ -35,9 +35,10 @@ export default function CreatePage() {
   const { isSubmitting, isValid } = form.formState;
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const reseponse = await axios.post("/api/course", data);
-      if (reseponse.status === 200) {
+      const reseponse = await axios.post("/api/courses", data);
+      if (reseponse.status === 201) {
         router.push("/teacher/courses/" + reseponse.data.id);
+        toast.success("Course created successfully!");
       } else {
         toast.error("Something went wrong. Please try again.");
       }
