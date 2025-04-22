@@ -4,17 +4,18 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseid: string } }
+  { params }: { params: Promise<{ courseid: string }> }
 ) {
   const { courseid } =await params;
+
   try {
     const { userId } = await auth();
-
     const body = await req.json();
 
     if (!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+
     if (!courseid) {
       return NextResponse.json(
         { message: "Course ID is required" },
