@@ -1,28 +1,32 @@
 "use client";
-import React from "react";
+import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-interface TitleFormProps {
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import * as z from "zod";
+interface descriptionFormProps {
   initialData: {
-    title: string;
+    description: string;
   };
   courseId: string;
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
+  description: z.string().min(1, {
+    message: "description is required",
   }),
 });
-export default function TitleForm({ courseId, initialData }: TitleFormProps) {
+export default function DescriptionForm({
+  courseId,
+  initialData,
+}: descriptionFormProps) {
   const [isEditing, setIsEditing] = React.useState(false);
 
   const toggleEdit = () => {
@@ -53,7 +57,7 @@ export default function TitleForm({ courseId, initialData }: TitleFormProps) {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <span>Course title</span>
+        <span>Course description</span>
         <Button variant={"ghost"} onClick={toggleEdit}>
           {isEditing ? (
             <span className="text-red-500">Cancel</span>
@@ -65,7 +69,7 @@ export default function TitleForm({ courseId, initialData }: TitleFormProps) {
           )}
         </Button>
       </div>
-      {!isEditing && <p>{initialData.title}</p>}
+      {!isEditing && <p>{initialData.description}</p>}
       {isEditing && (
         <Form {...form}>
           <form
@@ -74,12 +78,12 @@ export default function TitleForm({ courseId, initialData }: TitleFormProps) {
           >
             <FormField
               control={form.control}
-              name="title"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      placeholder="Course Title"
+                    <Textarea
+                      placeholder="Course description"
                       disabled={isSubmitting}
                       {...field}
                     />

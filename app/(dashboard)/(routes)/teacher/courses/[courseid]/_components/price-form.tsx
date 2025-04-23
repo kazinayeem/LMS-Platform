@@ -10,19 +10,19 @@ import { Pencil } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-interface TitleFormProps {
+interface PriceFormProps {
   initialData: {
-    title: string;
+    price: number;
   };
   courseId: string;
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
+  price: z.coerce.number().min(1, {
+    message: "Price is required",
   }),
 });
-export default function TitleForm({ courseId, initialData }: TitleFormProps) {
+export default function PriceForm({ courseId, initialData }: PriceFormProps) {
   const [isEditing, setIsEditing] = React.useState(false);
 
   const toggleEdit = () => {
@@ -53,7 +53,7 @@ export default function TitleForm({ courseId, initialData }: TitleFormProps) {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        <span>Course title</span>
+        <span>Course Price</span>
         <Button variant={"ghost"} onClick={toggleEdit}>
           {isEditing ? (
             <span className="text-red-500">Cancel</span>
@@ -65,7 +65,7 @@ export default function TitleForm({ courseId, initialData }: TitleFormProps) {
           )}
         </Button>
       </div>
-      {!isEditing && <p>{initialData.title}</p>}
+      {!isEditing && <p>{initialData.price}</p>}
       {isEditing && (
         <Form {...form}>
           <form
@@ -74,12 +74,13 @@ export default function TitleForm({ courseId, initialData }: TitleFormProps) {
           >
             <FormField
               control={form.control}
-              name="title"
+              name="price"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
-                      placeholder="Course Title"
+                      type="number"
+                      placeholder="Course Price"
                       disabled={isSubmitting}
                       {...field}
                     />

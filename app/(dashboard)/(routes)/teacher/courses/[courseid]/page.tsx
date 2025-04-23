@@ -4,6 +4,9 @@ import { auth } from "@clerk/nextjs/server";
 import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import TitleForm from "./_components/title-form";
+import DescriptionForm from "./_components/description-form";
+import PriceForm from "./_components/price-form";
+import CourseImageForm from "./_components/image-form";
 
 export default async function Page({
   params,
@@ -64,7 +67,25 @@ export default async function Page({
           <TitleForm
             courseId={courseid}
             initialData={{
-              title: course.title,
+              title: course.title as string,
+            }}
+          />
+          <DescriptionForm
+            courseId={courseid}
+            initialData={{
+              description: course.description as string,
+            }}
+          />
+          <CourseImageForm
+            courseId={courseid}
+            initialData={{
+              imageUrl: course.imageUrl as string,
+            }}
+          />
+          <PriceForm
+            courseId={courseid}
+            initialData={{
+              price: course.price as number,
             }}
           />
         </div>
