@@ -9,6 +9,7 @@ import CourseImageForm from "./_components/image-form";
 import PriceForm from "./_components/price-form";
 import TitleForm from "./_components/title-form";
 import { AttachmentForm } from "./_components/attachment-form";
+import { ChaptersForm } from "./_components/chapters-form";
 
 export default async function Page({
   params,
@@ -23,9 +24,12 @@ export default async function Page({
   const course = await prisma.course.findUnique({
     where: {
       id: courseid,
+      userId: userId,
     },
     include: {
       attachments: true,
+      chapters: true,
+      Category: true,
     },
   });
   const category = await prisma.category.findMany({
@@ -43,6 +47,7 @@ export default async function Page({
     course.imageUrl,
     course.categoryId,
     course.price,
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requireFields.length;
@@ -55,7 +60,9 @@ export default async function Page({
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-bold">Course SetUp</h1>
+          <h1 className="text-2xl font-bold">
+            Course: {course.title ?? "Untitled"}
+          </h1>
           <p className="text-sm text-slate-600 dark:text-slate-400">
             {completionText}
           </p>
@@ -111,6 +118,17 @@ export default async function Page({
               <h2 className="text-xl">Resources & Attachments</h2>
             </div>
             <AttachmentForm initialData={course} courseId={course.id} />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={File} />
+              <h2 className="text-xl">Chapters</h2>
+            </div>
+            <ChaptersForm
+              courseId={courseid}
+              initialData={course}
+              key={course.id}
+            />
           </div>
         </div>
       </div>

@@ -1,16 +1,62 @@
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import prisma from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import React from "react";
+import { redirect } from "next/navigation";
 
-export default function page() {
+export default async function Page() {
+  const { userId } = await auth();
+  if (!userId) {
+    return redirect("/sign-in");
+  }
+  const course = await prisma.course.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      Category: true,
+    },
+  });
   return (
-    <div className="p-6 gap-2 flex flex-row items-center">
-      <Link href="/teacher/create">
-        <Button>New Course</Button>
-      </Link>
-      <Link href="/teacher/category">
-        <Button>New Category</Button>
-      </Link>
+    <div className="p-6 space-y-6">
+      <div className="p-6 gap-2 flex flex-row items-center">
+        <Link href="/teacher/create">
+          <Button>New Course</Button>
+        </Link>
+        <Link href="/teacher/category">
+          <Button>New Category</Button>
+        </Link>
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+            <TableHead className="text-right">IsPublished</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {course.map((course) => (
+            <TableRow key={course.id}>
+              <TableCell>{course.title}</TableCell>
+              <TableCell>{course.Category?.name}</TableCell>
+              <TableCell className="text-right">{course.price}</TableCell>
+              <TableCell className="text-right">
+                {course.isPublished ? "Yes" : "No"}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
