@@ -7,18 +7,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
-import * as z from "zod";
 interface TitleFormProps {
   initialData: {
     imageUrl: string;
   };
   courseId: string;
 }
-const formSchema = z.object({
-  imageUrl: z.string().min(1, {
-    message: "Image is required",
-  }),
-});
+type FormData = {
+  imageUrl: string;
+};
+
 export default function CourseImageForm({
   courseId,
   initialData,
@@ -31,7 +29,7 @@ export default function CourseImageForm({
 
   const router = useRouter();
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: FormData) => {
     try {
       const response = await axios.patch("/api/courses/" + courseId, data);
       if (response.status === 201) {
