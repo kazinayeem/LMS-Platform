@@ -1,13 +1,14 @@
 import { IconBadge } from "@/components/icon-badge";
 import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { LayoutDashboard } from "lucide-react";
+import { File, LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import { SelectCategory } from "./_components/category-from";
 import DescriptionForm from "./_components/description-form";
 import CourseImageForm from "./_components/image-form";
 import PriceForm from "./_components/price-form";
 import TitleForm from "./_components/title-form";
+import { AttachmentForm } from "./_components/attachment-form";
 
 export default async function Page({
   params,
@@ -22,6 +23,9 @@ export default async function Page({
   const course = await prisma.course.findUnique({
     where: {
       id: courseid,
+    },
+    include: {
+      attachments: true,
     },
   });
   const category = await prisma.category.findMany({
@@ -100,7 +104,14 @@ export default async function Page({
               label: cat.name,
               value: cat.id,
             }))}
-          />
+          />{" "}
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={File} />
+              <h2 className="text-xl">Resources & Attachments</h2>
+            </div>
+            <AttachmentForm initialData={course} courseId={course.id} />
+          </div>
         </div>
       </div>
     </div>

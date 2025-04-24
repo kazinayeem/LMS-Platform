@@ -146,6 +146,53 @@ exports.Prisma.AttachmentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ChapterScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  videoUrl: 'videoUrl',
+  position: 'position',
+  isPublished: 'isPublished',
+  isFree: 'isFree',
+  courseId: 'courseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MuxDataScalarFieldEnum = {
+  id: 'id',
+  assetId: 'assetId',
+  playbackId: 'playbackId',
+  chapterId: 'chapterId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chapterId: 'chapterId',
+  isCompleted: 'isCompleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PurchaseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StripeCustomerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  stripeId: 'stripeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -165,7 +212,12 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Course: 'Course',
   Category: 'Category',
-  Attachment: 'Attachment'
+  Attachment: 'Attachment',
+  Chapter: 'Chapter',
+  MuxData: 'MuxData',
+  UserProgress: 'UserProgress',
+  Purchase: 'Purchase',
+  StripeCustomer: 'StripeCustomer'
 };
 
 /**
