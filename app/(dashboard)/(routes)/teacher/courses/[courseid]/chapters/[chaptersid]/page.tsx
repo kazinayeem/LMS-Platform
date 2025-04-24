@@ -7,18 +7,18 @@ import { auth } from "@clerk/nextjs/server";
 const ChapterIdPage = async ({
   params,
 }: {
-  params: { courseid: string; chaptersid: string };
+  params: Promise<{ courseid: string; chaptersid: string }>;
 }) => {
   const { userId } = await auth();
-
+  const { courseid, chaptersid } = await params;
   if (!userId) {
     return redirect("/");
   }
 
   const chapter = await prisma.chapter.findUnique({
     where: {
-      id: params.chaptersid,
-      courseId: params.courseid,
+      id: chaptersid,
+      courseId: courseid,
     },
     include: {
       muxData: true,
@@ -41,7 +41,7 @@ const ChapterIdPage = async ({
       <div className="flex items-center justify-between">
         <div className="w-full">
           <Link
-            href={`/teacher/courses/${params.courseid}`}
+            href={`/teacher/courses/${courseid}`}
             className="flex items-center text-sm hover:opacity-75 transition mb-6"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
