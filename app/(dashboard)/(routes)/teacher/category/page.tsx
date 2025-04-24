@@ -1,7 +1,7 @@
 import prisma from "@/lib/db";
 import CategoryForm from "./_components/CategoryForm";
 
-export default async function CategoryPage() {
+export default async function Page() {
   const categories = await prisma.category.findMany();
 
   return (
