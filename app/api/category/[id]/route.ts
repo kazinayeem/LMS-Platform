@@ -5,8 +5,12 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  console.log("Updating category...");
+  console.log("Request body:", req.body);
+
+  const { name } = await req.json();
+  console.log("Parsed name:", name);
   try {
-    const { name } = await req.json();
     const updated = await prisma.category.update({
       where: { id: (await params).id },
       data: { name },
