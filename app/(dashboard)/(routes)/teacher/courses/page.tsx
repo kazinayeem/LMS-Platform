@@ -41,6 +41,7 @@ export default async function Page() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Course ID</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Category</TableHead>
               <TableHead className="text-right">Price</TableHead>
@@ -50,6 +51,7 @@ export default async function Page() {
           <TableBody>
             {course.map((course) => (
               <TableRow key={course.id}>
+                <TableCell className="font-medium">{course.id}</TableCell>
                 <TableCell>{course.title}</TableCell>
                 <TableCell>{course.Category?.name}</TableCell>
                 <TableCell className="text-right">{course.price}</TableCell>
