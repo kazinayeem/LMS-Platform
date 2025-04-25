@@ -1,3 +1,4 @@
+import { LoadingSkeleton } from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -11,6 +12,7 @@ import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function Page() {
   const { userId } = await auth();
@@ -35,28 +37,30 @@ export default async function Page() {
           <Button>New Category</Button>
         </Link>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead className="text-right">Price</TableHead>
-            <TableHead className="text-right">IsPublished</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {course.map((course) => (
-            <TableRow key={course.id}>
-              <TableCell>{course.title}</TableCell>
-              <TableCell>{course.Category?.name}</TableCell>
-              <TableCell className="text-right">{course.price}</TableCell>
-              <TableCell className="text-right">
-                {course.isPublished ? "Yes" : "No"}
-              </TableCell>
+      <Suspense fallback={<LoadingSkeleton />}>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead className="text-right">Price</TableHead>
+              <TableHead className="text-right">IsPublished</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {course.map((course) => (
+              <TableRow key={course.id}>
+                <TableCell>{course.title}</TableCell>
+                <TableCell>{course.Category?.name}</TableCell>
+                <TableCell className="text-right">{course.price}</TableCell>
+                <TableCell className="text-right">
+                  {course.isPublished ? "Yes" : "No"}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Suspense>
     </div>
   );
 }

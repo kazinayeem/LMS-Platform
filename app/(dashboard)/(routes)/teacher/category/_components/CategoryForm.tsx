@@ -13,12 +13,13 @@ export default function CategoryForm({
   initialCategories: { id: string; name: string }[];
 }) {
   const categories = initialCategories;
-
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
 
     const url = editingId ? `/api/category/${editingId}` : `/api/category`;
@@ -30,7 +31,7 @@ export default function CategoryForm({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
     });
-
+    setLoading(false);
     setName("");
     setEditingId(null);
     router.refresh();
@@ -39,12 +40,15 @@ export default function CategoryForm({
   const handleEdit = (cat: { id: string; name: string }) => {
     setName(cat.name);
     setEditingId(cat.id);
+    setLoading(false);
     router.refresh();
   };
 
   const handleDelete = async (id: string) => {
+    setLoading(true);
     await fetch(`/api/category/${id}`, { method: "DELETE" });
     router.refresh();
+    setLoading(false);
   };
 
   return (
@@ -61,13 +65,14 @@ export default function CategoryForm({
             required
           />
         </div>
-        <Button type="submit">{editingId ? "Update" : "Add"}</Button>
+        <Button type="submit">
+          {loading ? "Loading..." : editingId ? "Update" : "Add"}
+        </Button>
       </form>
-
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Categories</h2>
-        {categories.map((cat) => (
-          <Card key={cat.id}>
+      <h2 className="text-2xl font-bold">Categories</h2>
+      <div className="space-y-4 flex flex-row gap-4 flex-wrap ">
+        {categories?.map((cat) => (
+          <Card key={cat.id} className="w-1/4 flex flex-col justify-between">
             <CardContent className="p-4 space-y-1">
               <h3 className="text-lg font-semibold">{cat.name}</h3>
               <div className="flex gap-2 mt-2">

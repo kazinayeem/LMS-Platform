@@ -17,6 +17,7 @@ interface DescriptionFormProps {
     description: string;
   };
   courseId: string;
+  chapterId: string;
 }
 
 const formSchema = z.object({
@@ -28,6 +29,7 @@ const formSchema = z.object({
 export default function DescriptionForm({
   courseId,
   initialData,
+  chapterId,
 }: DescriptionFormProps) {
   const [isEditing, setIsEditing] = React.useState(false);
   const quillRef = useRef<Quill | null>(null);
@@ -45,13 +47,14 @@ export default function DescriptionForm({
 
   useEffect(() => {
     if (isEditing && editorRef.current && !quillRef.current) {
+      // Initialize Quill when editing starts
       const quill = new Quill(editorRef.current, {
         theme: "snow",
         modules: {
           toolbar: [
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
             ["bold", "italic", "underline", "strike"],
-            [{ color: [] }, { background: [] }], 
+            [{ color: [] }, { background: [] }],
             [{ list: "ordered" }, { list: "bullet" }],
             [{ script: "sub" }, { script: "super" }],
             [{ indent: "-1" }, { indent: "+1" }],
@@ -63,15 +66,10 @@ export default function DescriptionForm({
         },
         placeholder: "Write your course description here...",
       });
-
-      // Set initial content
       quill.root.innerHTML = form.getValues("description") || "";
-
-      // Update form value when editor content changes
       quill.on("text-change", () => {
         form.setValue("description", quill.root.innerHTML);
       });
-
       quillRef.current = quill;
     }
 
@@ -84,7 +82,10 @@ export default function DescriptionForm({
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.patch(`/api/courses/${courseId}`, data);
+      const response = await axios.patch(
+        `/api/courses/${courseId}/chapters/${chapterId}`,
+        data
+      );
       if (response.status === 200 || response.status === 201) {
         toast.success("Course updated successfully!");
         router.refresh();
@@ -116,7 +117,7 @@ export default function DescriptionForm({
 
       {!isEditing && (
         <div
-          className="mt-2 prose max-w-none"
+          className="mt-2"
           dangerouslySetInnerHTML={{ __html: initialData.description }}
         />
       )}
@@ -127,10 +128,7 @@ export default function DescriptionForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="mt-4 space-y-4"
           >
-            <div
-              ref={editorRef}
-              className="bg-white rounded-md h-64" // Added fixed height for better editor visibility
-            />
+            <div ref={editorRef} className="bg-white rounded-md" />
             <div className="flex items-center gap-x-2">
               <Button disabled={isSubmitting} type="submit">
                 {isSubmitting ? "Saving..." : "Save"}

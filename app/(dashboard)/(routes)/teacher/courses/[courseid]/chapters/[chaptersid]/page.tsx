@@ -3,6 +3,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import DescriptionForm from "./_components/chapter-description-form";
+import TitleForm from "./_components/chapter-titile-form";
+import { ChapterAccessForm } from "./_components/chapter-access-form";
 
 const ChapterIdPage = async ({
   params,
@@ -42,7 +45,7 @@ const ChapterIdPage = async ({
         <div className="w-full">
           <Link
             href={`/teacher/courses/${courseid}`}
-            className="flex items-center text-sm hover:opacity-75 transition mb-6"
+            className="flex items-center text-sm hover:opacity-75 hover:text-blue-500 transition mb-6"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to course setup
@@ -56,6 +59,24 @@ const ChapterIdPage = async ({
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex flex-col gap-y-4 mt-6  p-4">
+        {" "}
+        <TitleForm
+          chapterId={chaptersid}
+          courseId={courseid}
+          initialData={{ title: chapter.title ?? "" }}
+        />
+        <DescriptionForm
+          chapterId={chaptersid}
+          courseId={courseid}
+          initialData={{ description: chapter.description ?? "" }}
+        />
+        <ChapterAccessForm
+          chapterId={chaptersid}
+          courseId={courseid}
+          initialData={chapter}
+        />
       </div>
     </div>
   );
