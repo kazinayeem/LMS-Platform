@@ -3,11 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import EditButton from "./edit-button";
 import DeleteButton from "./delete-button";
 
-export const dynamic = "force-dynamic";
-
 export default async function CategoryList() {
   const categories = await prisma.category.findMany();
-
   return (
     <div className="flex flex-wrap gap-4 w-full">
       {categories?.map((cat) => (
