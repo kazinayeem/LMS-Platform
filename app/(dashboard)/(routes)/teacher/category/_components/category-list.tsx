@@ -1,15 +1,14 @@
-import prisma from "@/lib/db";
+// _components/category-list.tsx
 import { Card, CardContent } from "@/components/ui/card";
-import EditButton from "./edit-button";
+import prisma from "@/lib/db";
 import DeleteButton from "./delete-button";
-
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+import EditButton from "./edit-button";
 
 export default async function CategoryList() {
   const categories = await prisma.category.findMany();
+
   return (
-    <div className="flex flex-wrap gap-4 w-full">
+    <>
       {categories?.map((cat) => (
         <Card
           key={cat.id}
@@ -24,6 +23,6 @@ export default async function CategoryList() {
           </CardContent>
         </Card>
       ))}
-    </div>
+    </>
   );
 }
